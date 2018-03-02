@@ -116,22 +116,8 @@ class GithubHtmlReport:
                 html += "</p>"
             html += "<code>%s</code>" % test.error
             html += "<br/><br/>"
-        if test_steps_html or test.error or test.jobs:
-            html += "<p>"
-            html += "<details><summary>Click to expand full logs</summary>"
-            html += "<br/>"
-            html += "<p><ins>Test steps:</ins></p>"
-            html += "<blockquote>"
-            html += "%s" % ''.join(test_steps_html)
-            html += "</blockquote>"
-            if test.error:
-                html += "<p><ins>Erorr:</ins></p>"
-                html += "<code>%s</code>" % test.error
-                html += "<br/><br/>"
-            if test.jobs:
-                html += self.build_device_sessions_html(test.jobs)
-            html += "</details>"
-            html += "</p>"
+        if test.jobs:
+            html += self.build_device_sessions_html(test.jobs)
         html += "</td></tr>"
         return html
 
