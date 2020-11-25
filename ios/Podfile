@@ -31,6 +31,10 @@ def add_flipper_pods!(versions = {})
   pod 'FlipperKit/FlipperKitHighlightOverlay', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitLayoutTextSearchable', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitNetworkPlugin', versions['Flipper'], :configuration => 'Debug'
+
+  pod 'secp256k1.swift', git: "git@github.com:gravityblast/secp256k1.swift.git", :branch => "podspec"
+  pod 'CryptoSwift'
+  pod 'StatusKeycard', :git => 'git@github.com:status-im/react-native-status-keycard.git', :branch => 'feature/ios'
 end
 
 # Post Install processing for Flipper
@@ -91,10 +95,10 @@ abstract_target 'Status' do
       # Pods for testing
     end
   end
-  
+
   target 'StatusImPR' do
   end
-  
+
   add_flipper_pods!
   post_install do |installer|
     flipper_post_install(installer)
