@@ -9,6 +9,10 @@ def add_flipper_pods!(versions = {})
   versions['Flipper-PeerTalk'] ||= '~> 0.0.4'
   versions['Flipper-RSocket'] ||= '~> 1.0'
 
+  pod "react-native-status-keycard", path: "../node_modules/react-native-status-keycard"
+  pod "Keycard", git: "https://github.com/status-im/Keycard.swift.git"
+  pod 'secp256k1', git: "https://github.com/status-im/secp256k1.swift.git", submodules: true
+
   pod 'FlipperKit', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitLayoutPlugin', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/SKIOSNetworkPlugin', versions['Flipper'], :configuration => 'Debug'
@@ -31,10 +35,6 @@ def add_flipper_pods!(versions = {})
   pod 'FlipperKit/FlipperKitHighlightOverlay', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitLayoutTextSearchable', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitNetworkPlugin', versions['Flipper'], :configuration => 'Debug'
-
-  pod 'secp256k1.swift', git: "git@github.com:gravityblast/secp256k1.swift.git", :branch => "podspec"
-  pod 'CryptoSwift'
-  pod 'StatusKeycard', :git => 'git@github.com:status-im/react-native-status-keycard.git', :branch => 'feature/ios'
 end
 
 # Post Install processing for Flipper
