@@ -103,10 +103,7 @@
       {:accessibility-label (keyword (str "select-storage-" type))
        :on-press #(re-frame/dispatch
                    [:intro-wizard/on-key-storage-selected
-                    (if (or platform/android?
-                            config/keycard-test-menu-enabled?)
-                      type
-                      :default)])}
+                    type])}
       [react/view (assoc (styles/list-item selected?)
                          :align-items :flex-start
                          :padding-top 16

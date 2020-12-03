@@ -110,13 +110,12 @@
        (setItem "status-keycard-pairings" (types/serialize pairings)))))
 
 (re-frame/reg-fx
- :keycard/retrieve-pairings
- (fn []
-   (when platform/android?
-     (.. AsyncStorage
-         (getItem "status-keycard-pairings")
-         (then #(re-frame/dispatch [:keycard.callback/on-retrieve-pairings-success
-                                    (types/deserialize %)]))))))
+  :keycard/retrieve-pairings
+  (fn []
+    (.. AsyncStorage
+        (getItem "status-keycard-pairings")
+        (then #(re-frame/dispatch [:keycard.callback/on-retrieve-pairings-success
+                                   (types/deserialize %)])))))
 
 ;; TODO: Should act differently on different views
 (re-frame/reg-fx

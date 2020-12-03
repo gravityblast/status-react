@@ -30,17 +30,14 @@
 (defn decrement-step [step]
   (let [inverted  (map-invert step-kw-to-num)]
     (if (and (= step :create-code)
-             (or (not platform/android?)
-                 (not (nfc/nfc-supported?))))
+             (not (nfc/nfc-supported?)))
       :choose-key
       (inverted (dec (step-kw-to-num step))))))
 
 (defn inc-step [step]
   (let [inverted (map-invert step-kw-to-num)]
     (if (and (= step :choose-key)
-             (or (not (or platform/android?
-                          config/keycard-test-menu-enabled?))
-                 (not (nfc/nfc-supported?))))
+             (not (nfc/nfc-supported?)))
       :create-code
       (inverted (inc (step-kw-to-num step))))))
 

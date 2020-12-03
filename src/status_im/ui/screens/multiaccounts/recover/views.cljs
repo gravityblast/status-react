@@ -51,23 +51,21 @@
       :accessibility-label :enter-seed-phrase-button
       :icon                :main-icons/text
       :on-press            #(hide-sheet-and-dispatch [::multiaccounts.recover/enter-phrase-pressed])}]
-    (when (or platform/android?
-              config/keycard-test-menu-enabled?)
-      [quo/list-item
-       {:theme               :accent
-        :title               (i18n/label :t/recover-with-keycard)
-        :accessibility-label :recover-with-keycard-button
-        :icon                [react/view {:border-width     1
-                                          :border-radius    20
-                                          :border-color     colors/blue-light
-                                          :background-color colors/blue-light
-                                          :justify-content  :center
-                                          :align-items      :center
-                                          :width            40
-                                          :height           40}
-                              [react/image {:source (resources/get-image :keycard-logo-blue)
-                                            :style  {:width 24 :height 24}}]]
-        :on-press            #(hide-sheet-and-dispatch [::keycard/recover-with-keycard-pressed])}])]])
+    [quo/list-item
+     {:theme               :accent
+      :title               (i18n/label :t/recover-with-keycard)
+      :accessibility-label :recover-with-keycard-button
+      :icon                [react/view {:border-width     1
+                                        :border-radius    20
+                                        :border-color     colors/blue-light
+                                        :background-color colors/blue-light
+                                        :justify-content  :center
+                                        :align-items      :center
+                                        :width            40
+                                        :height           40}
+                            [react/image {:source (resources/get-image :keycard-logo-blue)
+                                          :style  {:width 24 :height 24}}]]
+      :on-press            #(hide-sheet-and-dispatch [::keycard/recover-with-keycard-pressed])}]]])
 
 (def bottom-sheet
   {:content bottom-sheet-view})

@@ -10,9 +10,7 @@
 
 (defonce card (if config/keycard-test-menu-enabled?
                 (simulated-keycard/SimulatedKeycard.)
-                (if platform/android?
-                  (real-keycard/RealKeycard.)
-                  (ios-keycard/IOSKeycard.))))
+                (real-keycard/RealKeycard.)))
 
 (defn check-nfc-support []
   (log/info "[keycard] check-nfc-support")

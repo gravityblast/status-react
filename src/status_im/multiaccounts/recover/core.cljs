@@ -237,9 +237,7 @@
                          assoc :step :select-key-storage
                          :forward-action :multiaccounts.recover/select-storage-next-pressed
                          :selected-storage-type :default)}
-            (if (and (or platform/android?
-                         config/keycard-test-menu-enabled?)
-                     (nfc/nfc-supported?))
+            (if (nfc/nfc-supported?)
               (navigation/navigate-to-cofx :recover-multiaccount-select-storage nil)
               (select-storage-next-pressed))))
 
