@@ -414,3 +414,9 @@
 
 (defn send-transaction-with-signature [args]
   (keycard/send-transaction-with-signature card args))
+
+(defn start-nfc [args]
+  (keycard/start-nfc card args))
+
+(defn stop-nfc [args]
+  (keycard/stop-nfc card args))

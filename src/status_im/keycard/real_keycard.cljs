@@ -10,6 +10,16 @@
 (defonce event-emitter (.-DeviceEventEmitter rn))
 (defonce active-listeners (atom []))
 
+(defn start-nfc [{:keys [on-success]}]
+  (.. status-keycard
+      startNFC
+      (then on-success)))
+
+(defn stop-nfc [{:keys [on-success]}]
+  (.. status-keycard
+      stopNFC
+      (then on-success)))
+
 (defn check-nfc-support [{:keys [on-success]}]
   (.. status-keycard
       nfcIsSupported
@@ -226,6 +236,10 @@
 
 (defrecord RealKeycard []
   keycard/Keycard
+  (keycard/start-nfc [this args]
+    (start-nfc args))
+  (keycard/stop-nfc [this args]
+    (stop-nfc args))
   (keycard/check-nfc-support [this args]
     (check-nfc-support args))
   (keycard/check-nfc-enabled [this args]

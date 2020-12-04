@@ -8,6 +8,16 @@
             ["@react-native-community/async-storage" :default AsyncStorage]))
 
 (re-frame/reg-fx
+  :keycard/start-nfc
+  (fn []
+    (card/start-nfc { :on-success #(re-frame/dispatch [:keycard.callback/start-nfc-success])})))
+
+(re-frame/reg-fx
+  :keycard/stop-nfc
+  (fn []
+    (card/stop-nfc { :on-success #(re-frame/dispatch [:keycard.callback/start-nfc-success])})))
+
+(re-frame/reg-fx
  :keycard/get-application-info
  card/get-application-info)
 

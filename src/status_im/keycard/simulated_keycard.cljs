@@ -14,6 +14,7 @@
 
 (def initial-state
   {:card-connected?  false
+   :nfc-started? false
    :application-info {:initialized? false}})
 
 (defonce state (atom initial-state))
@@ -67,6 +68,12 @@
     (utils/set-timeout f 500)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn start-nfc [{:keys [on-success]}]
+  (later #(on-success true)))
+
+(defn stop-nfc [{:keys [on-success]}]
+  (later #(on-success true)))
 
 (defn check-nfc-support [{:keys [on-success]}]
   (later #(on-success true)))
@@ -390,6 +397,12 @@
 
 (defrecord SimulatedKeycard []
   keycard/Keycard
+  (keycard/start-nfc [this args]
+    (log/debug "simulated card start-nfc")
+    (start-nfc args))
+  (keycard/stop-nfc [this args]
+    (log/debug "simulated card stop-nfc")
+    (stop-nfc args))
   (keycard/check-nfc-support [this args]
     (log/debug "simulated card check-nfc-support")
     (check-nfc-support args))

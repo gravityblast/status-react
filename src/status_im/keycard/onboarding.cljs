@@ -286,7 +286,8 @@
                     :multiaccount-whisper-public-key
                     :application-info)
             (assoc-in [:keycard :setup-step] :begin)
-            (assoc-in [:keycard :pin :on-verified] nil))}
+            (assoc-in [:keycard :pin :on-verified] nil))
+    :dispatch [:keycard.ui/start-nfc]}
    (common/show-connection-sheet
     {:on-card-connected :keycard/get-application-info
      :on-card-read      :keycard/check-card-state
