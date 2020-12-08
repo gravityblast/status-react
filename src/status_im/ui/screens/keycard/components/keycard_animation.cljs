@@ -5,6 +5,7 @@
             [status-im.ui.components.animation :as animation]
             [status-im.ui.components.colors :as colors]
             [status-im.ui.components.icons.vector-icons :as vector-icons]
+            [taoensso.timbre :as log]
             [status-im.ui.components.react :as react]))
 
 (defn circle [{:keys [animation-value color size]}]
@@ -300,20 +301,23 @@
     (reagent/create-class
      {:component-did-mount
       (fn []
-        (doseq [listener @listeners]
-          (keycard-nfc/remove-event-listener listener))
+        (keycard-nfc/start-nfc { :on-success (fn []
+                                              (doseq [listener @listeners]
+                                                (keycard-nfc/remove-event-listener listener))
 
-        (reset! listeners [(keycard-nfc/on-card-connected on-card-connected)
-                           (keycard-nfc/on-card-disconnected on-error)])
+                                              (reset! listeners [(keycard-nfc/on-card-connected on-card-connected)
+                                                                 (keycard-nfc/on-card-disconnected on-error)])
 
-        (on-start-animation)
+                                              (on-start-animation)
 
-        (when connected?
-          (on-card-connected)))
+                                              (when connected?
+                                                (on-card-connected)))}))
       :component-will-unmount
       (fn []
-        (doseq [listener @listeners]
-          (keycard-nfc/remove-event-listener listener)))
+        (keycard-nfc/stop-nfc { :on-success (fn []
+                                              (doseq [listener @listeners]
+                                                (keycard-nfc/remove-event-listener listener))
+                                              )}))
       :render
       (fn []
         [react/view {:style {:position        :absolute

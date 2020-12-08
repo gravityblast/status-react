@@ -5,9 +5,13 @@
             [status-im.native-module.core :as status]
             [status-im.ethereum.core :as ethereum]
             [status-im.keycard.keycard :as keycard]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [status-im.utils.platform :as platform]))
 
-(defonce event-emitter (.-DeviceEventEmitter rn))
+(defonce event-emitter (if platform/ios?
+                         (new (.-NativeEventEmitter rn) status-keycard)
+                         (.-DeviceEventEmitter rn)))
+
 (defonce active-listeners (atom []))
 
 (defn start-nfc [{:keys [on-success]}]
