@@ -301,23 +301,20 @@
     (reagent/create-class
      {:component-did-mount
       (fn []
-        (keycard-nfc/start-nfc { :on-success (fn []
-                                              (doseq [listener @listeners]
-                                                (keycard-nfc/remove-event-listener listener))
+        (doseq [listener @listeners]
+          (keycard-nfc/remove-event-listener listener))
 
-                                              (reset! listeners [(keycard-nfc/on-card-connected on-card-connected)
-                                                                 (keycard-nfc/on-card-disconnected on-error)])
+        (reset! listeners [(keycard-nfc/on-card-connected on-card-connected)
+                           (keycard-nfc/on-card-disconnected on-error)])
 
-                                              (on-start-animation)
+        (on-start-animation)
 
-                                              (when connected?
-                                                (on-card-connected)))}))
+        (when connected?
+          (on-card-connected)))
       :component-will-unmount
       (fn []
-        (keycard-nfc/stop-nfc { :on-success (fn []
-                                              (doseq [listener @listeners]
-                                                (keycard-nfc/remove-event-listener listener))
-                                              )}))
+        (doseq [listener @listeners]
+          (keycard-nfc/remove-event-listener listener)))
       :render
       (fn []
         [react/view {:style {:position        :absolute

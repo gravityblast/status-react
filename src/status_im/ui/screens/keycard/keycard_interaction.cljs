@@ -5,7 +5,9 @@
             [status-im.ui.components.react :as react]
             [status-im.ui.screens.keycard.components.keycard-animation
              :refer [animated-circles]]
+            [taoensso.timbre :as log]
             [status-im.ui.components.colors :as colors]
+            [status-im.keycard.card :as keycard-nfc]
             [status-im.ui.screens.keycard.components.description :as description]
             [status-im.ui.screens.keycard.components.turn-nfc :as turn-nfc]
             [status-im.ui.screens.keycard.components.style :as styles]))
@@ -42,7 +44,7 @@
             {:title       (i18n/label (:title translation))
              :description (i18n/label (:description translation))}])]))))
 
-(defn connect-keycard [{:keys [on-connect on-cancel
+(defn connect-keycard-component [{:keys [on-connect on-cancel
                                connected? on-disconnect
                                params]}]
   [react/view {:style {:flex            1
@@ -75,3 +77,26 @@
      [turn-nfc/turn-nfc-on])
    (when (:footer params)
      [(:footer params)])])
+
+(defn connect-keycard [args]
+  (reagent/create-class
+    {:component-did-mount
+     (fn []
+       (log/info "------------------------- MOUNT")
+       (keycard-nfc/start-nfc
+         {:on-success (fn []
+                        (log/info "NFC STARTED"))
+          :on-failure (fn [err]
+                        (log/info "NFC STARTED WITH ERROR" err))}))
+     :component-will-unmount
+     (fn []
+       (log/info "------------------------- UNMOUNT")
+       (keycard-nfc/stop-nfc
+         {:on-success (fn []
+                        (log/info "NFC STOPPED"))
+          :on-failure (fn [err]
+                        (log/info "NFC STOPPED WITH ERROR" err))}))
+     :render
+     (fn []
+       (log/info "------------------------- RENDER")
+       (connect-keycard-component args))}))

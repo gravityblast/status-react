@@ -14,15 +14,17 @@
 
 (defonce active-listeners (atom []))
 
-(defn start-nfc [{:keys [on-success]}]
+(defn start-nfc [{:keys [on-success on-failure]}]
   (.. status-keycard
       startNFC
-      (then on-success)))
+      (then on-success)
+      (catch on-failure)))
 
-(defn stop-nfc [{:keys [on-success]}]
+(defn stop-nfc [{:keys [on-success on-failure]}]
   (.. status-keycard
       stopNFC
-      (then on-success)))
+      (then on-success)
+      (catch on-failure)))
 
 (defn check-nfc-support [{:keys [on-success]}]
   (.. status-keycard
