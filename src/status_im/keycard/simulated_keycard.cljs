@@ -94,18 +94,22 @@
     id))
 
 (defn register-card-events [args]
+  (log/debug "register-card-events")
   (on-card-connected (:on-card-connected args))
   (on-card-disconnected (:on-card-disconnected args)))
 
 (defn remove-event-listener [id]
+  (log/debug "remove-event-listener")
   (swap! state update :on-card-connected dissoc id)
   (swap! state update :on-card-disconnected dissoc id))
 
 (defn remove-event-listeners []
+  (log/debug "remove-event-listeners")
   (swap! state dissoc :on-card-connected)
   (swap! state dissoc :on-card-disconnected))
 
 (defn get-application-info [{:keys [on-success]}]
+  (log/debug "get-application-info")
   (later #(on-success (get @state :application-info))))
 
 (defn install-applet [_])

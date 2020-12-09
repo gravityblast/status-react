@@ -31,10 +31,12 @@
     (card/start-nfc
       {:on-success
        (fn []
+         (log/info "nfc started successfully. next: show-connection-sheet")
          (re-frame/dispatch [:keycard.callback/start-nfc-success])
          (re-frame/dispatch [:keycard.callback/show-connection-sheet args]))
        :on-failure
        (fn []
+         (log/info "nfc failed star starting. not calling show-connection-sheet")
          (re-frame/dispatch [:keycard.callback/start-nfc-failure]))})))
 
 (re-frame/reg-fx
