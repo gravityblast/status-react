@@ -168,7 +168,7 @@
       :on-connect    ::on-card-connected
       :on-disconnect ::on-card-disconnected})))
 
-(fx/defn show-connection-sheet
+(fx/defn show-connection-sheet-component
   [{:keys [db] :as cofx} {:keys [on-card-connected on-card-read handler]
                           {:keys [on-cancel]
                            :or   {on-cancel [::cancel-sheet-confirm]}}
@@ -195,13 +195,35 @@
      (when connected?
        handler))))
 
-(fx/defn hide-connection-sheet
+(fx/defn show-connection-sheet
+  [cofx args]
+  (log/info "----------------- show connection")
+  {:keycard/start-nfc-and-show-connection-sheet args})
+
+(fx/defn on-nfc-ready-for-sheet
+  {:events [:keycard.callback/show-connection-sheet]}
+  [cofx args]
+  (log/info "----------------- on ready open")
+  (show-connection-sheet-component cofx args))
+
+(fx/defn hide-connection-sheet-component
   [{:keys [db] :as cofx}]
   (fx/merge cofx
             {:db (assoc-in db [:keycard :card-read-in-progress?] false)}
             (restore-on-card-connected)
             (restore-on-card-read)
             (bottom-sheet/hide-bottom-sheet)))
+
+(fx/defn hide-connection-sheet
+  [cofx]
+  (log/info "----------------- hide connection")
+  {:keycard/stop-nfc-and-hide-connection-sheet nil})
+
+(fx/defn on-nfc-ready-to-close-sheet
+  {:events [:keycard.callback/hide-connection-sheet]}
+  [cofx]
+  (log/info "----------------- on ready to close")
+  (hide-connection-sheet-component cofx))
 
 (fx/defn clear-pin
   [{:keys [db] :as cofx}]

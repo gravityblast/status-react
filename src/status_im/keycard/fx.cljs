@@ -5,17 +5,50 @@
             [status-im.native-module.core :as status]
             [status-im.utils.platform :as platform]
             ["react-native" :refer (BackHandler)]
+            [taoensso.timbre :as log]
             ["@react-native-community/async-storage" :default AsyncStorage]))
 
 (re-frame/reg-fx
   :keycard/start-nfc
   (fn []
-    (card/start-nfc { :on-success #(re-frame/dispatch [:keycard.callback/start-nfc-success])})))
+    (log/debug "fx start-nfc")
+    (card/start-nfc
+      {:on-success #(re-frame/dispatch [:keycard.callback/start-nfc-success])
+       :on-failure #(re-frame/dispatch [:keycard.callback/start-nfc-failure])})))
 
 (re-frame/reg-fx
   :keycard/stop-nfc
   (fn []
-    (card/stop-nfc { :on-success #(re-frame/dispatch [:keycard.callback/start-nfc-success])})))
+    (log/info "fx stop-nfc")
+    (card/stop-nfc
+      {:on-success #(re-frame/dispatch [:keycard.callback/stop-nfc-success])
+       :on-failure #(re-frame/dispatch [:keycard.callback/stop-nfc-success])})))
+
+(re-frame/reg-fx
+  :keycard/start-nfc-and-show-connection-sheet
+  (fn [args]
+    (log/info "fx start-nfc-and-show-connection-sheet")
+    (card/start-nfc
+      {:on-success
+       (fn []
+         (re-frame/dispatch [:keycard.callback/start-nfc-success])
+         (re-frame/dispatch [:keycard.callback/show-connection-sheet args]))
+       :on-failure
+       (fn []
+         (re-frame/dispatch [:keycard.callback/start-nfc-failure]))})))
+
+(re-frame/reg-fx
+  :keycard/stop-nfc-and-hide-connection-sheet
+  (fn []
+    (log/info "fx stop-nfc-and-hide-connection-sheet")
+    (card/stop-nfc
+      {:on-success
+       (fn []
+         (re-frame/dispatch [:keycard.callback/stop-nfc-success])
+         (re-frame/dispatch [:keycard.callback/hide-connection-sheet]))
+       :on-failure
+       (fn []
+         (re-frame/dispatch [:keycard.callback/stop-nfc-failure]))})))
 
 (re-frame/reg-fx
  :keycard/get-application-info

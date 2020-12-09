@@ -15,12 +15,14 @@
 (defonce active-listeners (atom []))
 
 (defn start-nfc [{:keys [on-success on-failure]}]
+  (log/info "start-nfc")
   (.. status-keycard
       startNFC
       (then on-success)
       (catch on-failure)))
 
 (defn stop-nfc [{:keys [on-success on-failure]}]
+  (log/info "stop-nfc")
   (.. status-keycard
       stopNFC
       (then on-success)
@@ -202,7 +204,7 @@
 
 (defn sign
   [{:keys [pairing pin path hash on-success on-failure]}]
-  (log/debug "keycard sign" "path" path)
+  (log/info "keycard sign" "path" path)
   (when (and pairing pin hash)
     (if path
       (.. status-keycard
