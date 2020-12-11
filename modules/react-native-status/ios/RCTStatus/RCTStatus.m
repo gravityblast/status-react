@@ -301,6 +301,17 @@ RCT_EXPORT_METHOD(hashTransaction:(NSString *)txArgsJSON
     callback(@[result]);
 }
 
+//////////////////////////////////////////////////////////////////// sendTransactionWithSignature
+RCT_EXPORT_METHOD(sendTransactionWithSignature:(NSString *)txArgsJSON
+                  signature:(NSString *)signature
+                  callback:(RCTResponseSenderBlock)callback) {
+#if DEBUG
+    NSLog(@"sendTransactionWithSignature() method called");
+#endif
+    NSString *result = StatusgoSendTransactionWithSignature(txArgsJSON, signature);
+    callback(@[result]);
+}
+
 //////////////////////////////////////////////////////////////////// multiAccountImportMnemonic
 RCT_EXPORT_METHOD(multiAccountImportMnemonic:(NSString *)json
                   callback:(RCTResponseSenderBlock)callback) {
