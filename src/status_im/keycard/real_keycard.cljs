@@ -21,10 +21,10 @@
       (then on-success)
       (catch on-failure)))
 
-(defn stop-nfc [{:keys [on-success on-failure]}]
+(defn stop-nfc [{:keys [on-success on-failure error-message]}]
   (log/info "stop-nfc")
   (.. status-keycard
-      stopNFC
+      (stopNFC (str error-message))
       (then on-success)
       (catch on-failure)))
 
