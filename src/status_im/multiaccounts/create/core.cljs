@@ -12,6 +12,7 @@
             [status-im.ui.components.bottom-sheet.core :as bottom-sheet]
             [status-im.ui.components.colors :as colors]
             [status-im.navigation :as navigation]
+            [status-im.utils.config :as config]
             [status-im.utils.fx :as fx]
             [status-im.utils.security :as security]
             [status-im.utils.signing-phrase.core :as signing-phrase]
