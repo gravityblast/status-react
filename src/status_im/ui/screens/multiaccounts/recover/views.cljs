@@ -5,10 +5,8 @@
             [status-im.multiaccounts.recover.core :as multiaccounts.recover]
             [status-im.keycard.recovery :as keycard]
             [status-im.i18n :as i18n]
-            [status-im.utils.config :as config]
             [status-im.ui.components.colors :as colors]
             [quo.core :as quo]
-            [status-im.utils.platform :as platform]
             [status-im.react-native.resources :as resources]
             [status-im.ui.components.icons.vector-icons :as icons]))
 

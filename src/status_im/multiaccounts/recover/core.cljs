@@ -13,11 +13,9 @@
             [status-im.utils.fx :as fx]
             [status-im.utils.security :as security]
             [status-im.utils.types :as types]
-            [status-im.utils.platform :as platform]
             [status-im.utils.utils :as utils]
             [status-im.ui.components.bottom-sheet.core :as bottom-sheet]
-            [taoensso.timbre :as log]
-            [status-im.utils.config :as config]))
+            [taoensso.timbre :as log]))
 
 (defn existing-account?
   [multiaccounts key-uid]

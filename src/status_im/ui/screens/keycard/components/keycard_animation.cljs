@@ -5,7 +5,6 @@
             [status-im.ui.components.animation :as animation]
             [status-im.ui.components.colors :as colors]
             [status-im.ui.components.icons.vector-icons :as vector-icons]
-            [taoensso.timbre :as log]
             [status-im.ui.components.react :as react]))
 
 (defn circle [{:keys [animation-value color size]}]
