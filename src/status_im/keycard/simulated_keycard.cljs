@@ -75,6 +75,9 @@
 (defn stop-nfc [{:keys [on-success]}]
   (later #(on-success true)))
 
+(defn set-nfc-message [{:keys [on-success]}]
+  (later #(on-success true)))  
+
 (defn check-nfc-support [{:keys [on-success]}]
   (later #(on-success true)))
 
@@ -407,6 +410,9 @@
   (keycard/stop-nfc [this args]
     (log/debug "simulated card stop-nfc")
     (stop-nfc args))
+  (keycard/set-nfc-message [this args]
+    (log/debug "simulated card set-nfc-message")
+    (set-nfc-message args))    
   (keycard/check-nfc-support [this args]
     (log/debug "simulated card check-nfc-support")
     (check-nfc-support args))

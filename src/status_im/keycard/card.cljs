@@ -418,3 +418,6 @@
 
 (defn stop-nfc [args]
   (keycard/stop-nfc card args))
+
+(defn set-nfc-message [args]
+  (keycard/set-nfc-message card args))

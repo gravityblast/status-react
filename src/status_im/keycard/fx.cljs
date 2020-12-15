@@ -21,7 +21,11 @@
    (log/info "fx stop-nfc")
    (card/stop-nfc
     {:on-success #(re-frame/dispatch [:keycard.callback/stop-nfc-success])
-     :on-failure #(re-frame/dispatch [:keycard.callback/stop-nfc-success])})))
+     :on-failure #(re-frame/dispatch [:keycard.callback/stop-nfc-failure])})))
+
+(re-frame/reg-fx
+ :keycard/set-nfc-message
+ card/set-nfc-message)     
 
 (re-frame/reg-fx
  :keycard/start-nfc-and-show-connection-sheet
