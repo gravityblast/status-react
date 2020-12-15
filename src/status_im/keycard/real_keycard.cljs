@@ -17,7 +17,7 @@
 (defn start-nfc [{:keys [on-success on-failure prompt-message]}]
   (log/info "start-nfc")
   (.. status-keycard
-      (startNFC (str error-message))
+      (startNFC (str prompt-message))
       (then on-success)
       (catch on-failure)))
 
