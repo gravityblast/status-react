@@ -122,7 +122,7 @@ RCT_EXPORT_METHOD(initKeystore:(NSString *)keyUID
 
     NSURL *commonKeystoreDir = [rootUrl URLByAppendingPathComponent:@"keystore"];
     NSURL *keystoreDir = [commonKeystoreDir URLByAppendingPathComponent:keyUID];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                    ^(void)
                    {
@@ -301,6 +301,16 @@ RCT_EXPORT_METHOD(hashTransaction:(NSString *)txArgsJSON
     callback(@[result]);
 }
 
+//////////////////////////////////////////////////////////////////// hashTypedData
+RCT_EXPORT_METHOD(hashTypedData:(NSString *)data
+                  callback:(RCTResponseSenderBlock)callback) {
+#if DEBUG
+    NSLog(@"hashTypedData() method called");
+#endif
+    NSString *result = StatusgoHashTypedData(data);
+    callback(@[result]);
+}
+
 //////////////////////////////////////////////////////////////////// sendTransactionWithSignature
 RCT_EXPORT_METHOD(sendTransactionWithSignature:(NSString *)txArgsJSON
                   signature:(NSString *)signature
@@ -338,7 +348,7 @@ RCT_EXPORT_METHOD(multiAccountDeriveAddresses:(NSString *)json
                           JSONObjectWithData:data
                           options:NSJSONReadingMutableContainers
                           error:nil];
-    
+
     return [json valueForKey:@"key-uid"];
 }
 
@@ -467,10 +477,10 @@ RCT_EXPORT_METHOD(saveAccountAndLoginWithKeycard:(NSString *)multiaccountData
     NSURL *rootUrl =[[fileManager
                       URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask]
                      lastObject];
-    
+
     NSURL *oldKeystoreDir = [rootUrl URLByAppendingPathComponent:@"keystore"];
     NSURL *multiaccountKeystoreDir = [oldKeystoreDir URLByAppendingPathComponent:keyUID];
-    
+
     return multiaccountKeystoreDir;
 }
 
@@ -484,12 +494,12 @@ RCT_EXPORT_METHOD(saveAccountAndLoginWithKeycard:(NSString *)multiaccountData
     NSString *keyUID = [self getKeyUID:accountData];
     NSURL *oldKeystoreDir = [rootUrl URLByAppendingPathComponent:@"keystore"];
     NSURL *multiaccountKeystoreDir = [self getKeyStoreDir:keyUID];
-    
+
     NSArray *keys = [fileManager contentsOfDirectoryAtPath:multiaccountKeystoreDir.path error:nil];
     if (keys.count == 0) {
         NSString *migrationResult = StatusgoMigrateKeyStoreDir(accountData, password, oldKeystoreDir.path, multiaccountKeystoreDir.path);
         NSLog(@"keystore migration result %@", migrationResult);
-        
+
         NSString *initKeystoreResult = StatusgoInitKeystore(multiaccountKeystoreDir.path);
         NSLog(@"InitKeyStore result %@", initKeystoreResult);
     }
@@ -514,7 +524,7 @@ RCT_EXPORT_METHOD(loginWithKeycard:(NSString *)accountData
     NSLog(@"LoginWithKeycard() method called");
 #endif
     [self migrateKeystore:accountData password:password];
-    
+
     NSString *result = StatusgoLoginWithKeycard(accountData, password, chatKey);
 
     NSLog(@"%@", result);
