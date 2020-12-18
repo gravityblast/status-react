@@ -128,9 +128,7 @@
        :accessibility-label :sync-settings-button
        :chevron             true
        :on-press            #(re-frame/dispatch [:navigate-to :sync-settings])}]
-     (when (and (or platform/android?
-                    config/keycard-test-menu-enabled?)
-                keycard-pairing)
+     (when keycard-pairing
        [quo/list-item
         {:icon                :main-icons/keycard
          :title               (i18n/label :t/keycard)
