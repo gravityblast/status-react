@@ -25,7 +25,7 @@
 
 (re-frame/reg-fx
  :keycard/set-nfc-message
- card/set-nfc-message)     
+ card/set-nfc-message)
 
 (re-frame/reg-fx
  :keycard/start-nfc-and-show-connection-sheet

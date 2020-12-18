@@ -33,7 +33,7 @@
   (.. status-keycard
       (setNFCMessage (str status-message))
       (then on-success)
-      (catch on-failure)))      
+      (catch on-failure)))
 
 (defn check-nfc-support [{:keys [on-success]}]
   (.. status-keycard
@@ -256,7 +256,7 @@
   (keycard/stop-nfc [this args]
     (stop-nfc args))
   (keycard/set-nfc-message [this args]
-    (set-nfc-message args))    
+    (set-nfc-message args))
   (keycard/check-nfc-support [this args]
     (check-nfc-support args))
   (keycard/check-nfc-enabled [this args]
