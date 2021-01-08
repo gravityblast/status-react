@@ -85,6 +85,7 @@ abstract_target 'Status' do
   pod 'SQLCipher', '~>3.0'
   pod 'SDWebImage', '5.9.3'
   pod 'TOCropViewController', '2.5.4'
+  pod 'CocoaAsyncSocket', '7.6.4'
 
   pod 'SSZipArchive'
 
