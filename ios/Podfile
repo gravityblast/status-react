@@ -83,6 +83,9 @@ abstract_target 'Status' do
 
   pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
   pod 'SQLCipher', '~>3.0'
+  pod 'SDWebImage', '5.9.3'
+  pod 'TOCropViewController', '2.5.4'
+
   pod 'SSZipArchive'
 
   permissions_path = '../node_modules/react-native-permissions/ios'

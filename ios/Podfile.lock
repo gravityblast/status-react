@@ -381,9 +381,9 @@ PODS:
     - React
   - RNSVG (9.13.6):
     - React
-  - SDWebImage (5.10.2):
-    - SDWebImage/Core (= 5.10.2)
-  - SDWebImage/Core (5.10.2)
+  - SDWebImage (5.9.3):
+    - SDWebImage/Core (= 5.9.3)
+  - SDWebImage/Core (5.9.3)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -394,7 +394,7 @@ PODS:
   - SQLCipher/standard (3.4.2):
     - SQLCipher/common
   - SSZipArchive (2.2.3)
-  - TOCropViewController (2.6.0)
+  - TOCropViewController (2.5.4)
   - TouchID (4.4.1):
     - React
   - Yoga (1.14.0)
@@ -482,9 +482,11 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - SDWebImage (= 5.9.3)
   - secp256k1 (from `https://github.com/status-im/secp256k1.swift.git`)
   - SQLCipher (~> 3.0)
   - SSZipArchive
+  - TOCropViewController (= 2.5.4)
   - TouchID (from `../node_modules/react-native-touch-id`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -716,16 +718,16 @@ SPEC CHECKSUMS:
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
-  SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
+  SDWebImage: a31ee8e90a97303529e03fb0c333eae0eacb88e9
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   secp256k1: f61d67e6fdcb85fd727acf1bf35ace6036db540c
   SQLCipher: f9fcf29b2e59ced7defc2a2bdd0ebe79b40d4990
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
+  TOCropViewController: 2a1ae1242600b1f2d996fd91a5268b2309a33b5c
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 0951b443670f8b7e923408088a380e9ca132d954
+PODFILE CHECKSUM: 01128ed641184a8a11d10f089a8bbf75663a918d
 
 COCOAPODS: 1.9.3
