@@ -14,7 +14,7 @@
 
 (def default-pin "000000")
 
-(def pin-mismatch-error #"Unexpected error SW, 0x63C\d+")
+(def pin-mismatch-error #"Unexpected error SW, 0x63C\d+|wrongPIN\(retryCounter: \d+\)")
 
 (fx/defn dispatch-event
   [_ event]
