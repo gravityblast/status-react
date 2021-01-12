@@ -206,28 +206,31 @@
   (let [tag-was-lost?       (common/tag-lost? (:error error))
         setup?              (boolean (get-in db [:keycard :setup-step]))
         on-verified-failure (get-in db [:keycard :pin :on-verified-failure])
-        exporting?          (get-in db [:keycard :on-export-success])]
+        exporting?          (get-in db [:keycard :on-export-success])
+        pin-retries (common/pin-retries (:error error))]
     (log/debug "[keycard] verify pin error" error)
     (when-not tag-was-lost?
-      (if (re-matches common/pin-mismatch-error (:error error))
+      (if (not (= nil pin-retries))
         (fx/merge cofx
-                  {:db (update-in db [:keycard :pin]
-                                  merge
-                                  {:status       :error
-                                   :enter-step   :current
-                                   :puk          []
-                                   :current      []
-                                   :original     []
-                                   :confirmation []
-                                   :sign         []
-                                   :error-label  :t/pin-mismatch})}
+                  {:db (-> db
+                           (assoc-in [:keycard :application-info :pin-retry-counter] pin-retries)
+                           (update-in [:keycard :pin]
+                                      merge
+                                      {:status       :error
+                                       :enter-step   :current
+                                       :puk          []
+                                       :current      []
+                                       :original     []
+                                       :confirmation []
+                                       :sign         []
+                                       :error-label  :t/pin-mismatch}))}
                   (common/hide-connection-sheet)
                   (when (and (not setup?)
                              (not on-verified-failure))
                     (if exporting?
                       (navigation/navigate-back)
                       (navigation/navigate-to-cofx :enter-pin-settings nil)))
-                  (common/get-application-info (common/get-pairing db) nil)
+                  (if (= 0 pin-retries) (common/frozen-keycard-popup))
                   (when on-verified-failure
                     (fn [_] {:utils/dispatch-later
                              [{:dispatch [on-verified-failure]

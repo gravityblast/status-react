@@ -14,7 +14,13 @@
 
 (def default-pin "000000")
 
-(def pin-mismatch-error #"Unexpected error SW, 0x63C\d+|wrongPIN\(retryCounter: \d+\)")
+(def pin-mismatch-error #"Unexpected error SW, 0x63C(\d+)|wrongPIN\(retryCounter: (\d+)\)")
+
+(defn pin-retries [error]
+  (let [matched-error (re-matches pin-mismatch-error error)]
+    (if matched-error
+      (js/parseInt (nth matched-error 1))
+      nil)))
 
 (fx/defn dispatch-event
   [_ event]
@@ -51,7 +57,9 @@
     :no-pairing-slots))
 
 (defn tag-lost? [error]
-  (= error "Tag was lost."))
+  (or
+   (= error "Tag was lost."))
+  (not (nil? (re-matches #".*Tag connection lost.*" error))))
 
 (defn find-multiaccount-by-keycard-instance-uid
   [db keycard-instance-uid]
@@ -311,7 +319,8 @@
 (defn- tag-lost-exception? [code error]
   (or
    (= code "android.nfc.TagLostException")
-   (= error "Tag was lost.")))
+   (= error "Tag was lost.")
+   (not (nil? (re-matches #".*Tag connection lost.*" error)))))
 
 (fx/defn process-error [{:keys [db]} code error]
   (when-not (tag-lost-exception? code error)
@@ -367,28 +376,37 @@
               (clear-on-card-read)
               (hide-connection-sheet))))
 
+(fx/defn frozen-keycard-popup
+  [{:keys [db] :as cofx}]
+  (if (:multiaccounts/login db)
+    (fx/merge
+     cofx
+     {:db (assoc-in db [:keycard :pin :status] :frozen-card)}
+     hide-connection-sheet)
+    {:db (assoc db :popover/popover {:view :frozen-card})}))
+
 (fx/defn on-get-keys-error
   {:events [:keycard.callback/on-get-keys-error]}
   [{:keys [db] :as cofx} error]
   (log/info "[keycard] get keys error: " error)
   (let [tag-was-lost? (tag-lost? (:error error))
         key-uid       (get-in db [:keycard :application-info :key-uid])
-        flow          (get-in db [:keycard :flow])]
+        flow          (get-in db [:keycard :flow])
+        pin-retries   (pin-retries (:error error))]
     (if tag-was-lost?
       {:db (assoc-in db [:keycard :pin :status] nil)}
-      (if (re-matches pin-mismatch-error (:error error))
+      (if (not (= nil pin-retries))
         (fx/merge
          cofx
-         {:keycard/get-application-info
-          {:pairing (get-pairing db key-uid)}
-
-          :db
-          (update-in db [:keycard :pin] merge
-                     {:status              :error
-                      :login               []
-                      :import-multiaccount []
-                      :error-label         :t/pin-mismatch})}
+         {:db (-> db
+                  (assoc-in [:keycard :application-info :pin-retry-counter] pin-retries)
+                  (update-in [:keycard :pin] merge
+                             {:status              :error
+                              :login               []
+                              :import-multiaccount []
+                              :error-label         :t/pin-mismatch}))}
          (hide-connection-sheet)
+         (if (= 0 pin-retries) (frozen-keycard-popup))
          (when (= flow :import)
            (navigation/navigate-to-cofx :keycard-recovery-pin nil)))
         (show-wrong-keycard-alert true)))))
@@ -408,15 +426,6 @@
               "pairing" pairing')
     {:keycard/get-application-info {:pairing    pairing'
                                     :on-success on-card-read}}))
-
-(fx/defn frozen-keycard-popup
-  [{:keys [db] :as cofx}]
-  (if (:multiaccounts/login db)
-    (fx/merge
-     cofx
-     {:db (assoc-in db [:keycard :pin :status] :frozen-card)}
-     hide-connection-sheet)
-    {:db (assoc db :popover/popover {:view :frozen-card})}))
 
 (fx/defn on-get-application-info-success
   {:events [:keycard.callback/on-get-application-info-success]}
@@ -451,7 +460,6 @@
           hide-connection-sheet)
          (when on-success'
            (dispatch-event cofx on-success')))))))
-
 (fx/defn on-get-application-info-error
   {:events [:keycard.callback/on-get-application-info-error]}
   [{:keys [db] :as cofx} error]
