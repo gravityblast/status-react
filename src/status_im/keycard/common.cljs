@@ -19,7 +19,7 @@
 (defn pin-retries [error]
   (let [matched-error (re-matches pin-mismatch-error error)]
     (if matched-error
-      (js/parseInt (nth matched-error 1))
+      (js/parseInt (nth (filter some? matched-error) 1))
       nil)))
 
 (fx/defn dispatch-event
@@ -58,8 +58,8 @@
 
 (defn tag-lost? [error]
   (or
-   (= error "Tag was lost."))
-  (not (nil? (re-matches #".*Tag connection lost.*" error))))
+   (= error "Tag was lost.")
+   (= error "NFCError:100")))
 
 (defn find-multiaccount-by-keycard-instance-uid
   [db keycard-instance-uid]
@@ -320,7 +320,7 @@
   (or
    (= code "android.nfc.TagLostException")
    (= error "Tag was lost.")
-   (not (nil? (re-matches #".*Tag connection lost.*" error)))))
+   (= error "NFCError:100")))
 
 (fx/defn process-error [{:keys [db]} code error]
   (when-not (tag-lost-exception? code error)
