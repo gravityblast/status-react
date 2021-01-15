@@ -640,7 +640,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Keycard:
-    :commit: ff2647661523218eeb477196e0539d63a89b8dfc
+    :commit: c17903500e9cf4c0feb9d47d285416780dea8ed5
     :git: https://github.com/status-im/Keycard.swift.git
   secp256k1:
     :commit: 46a1fa30d9b8babeae85ff519050f42394ab5fcc
@@ -731,4 +731,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 06f92b63603632a40d582f80e296b164d886ccd9
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1

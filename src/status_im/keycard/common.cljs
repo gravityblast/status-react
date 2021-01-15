@@ -59,7 +59,8 @@
 (defn tag-lost? [error]
   (or
    (= error "Tag was lost.")
-   (= error "NFCError:100")))
+   (= error "NFCError:100")
+   (not (nil? (re-matches #".*NFCError:100.*" error)))))
 
 (defn find-multiaccount-by-keycard-instance-uid
   [db keycard-instance-uid]
@@ -206,7 +207,7 @@
 (fx/defn show-connection-sheet
   [{:keys [db] :as cofx} args]
   (let [nfc-running? (get-in db [:keycard :nfc-running?])]
-    (log/info "show connection; already running?:" nfc-running?)
+    (log/info "show connection; already running?" nfc-running?)
     (if nfc-running?
       (show-connection-sheet-component cofx args)
       {:keycard/start-nfc-and-show-connection-sheet args})))
@@ -320,7 +321,9 @@
   (or
    (= code "android.nfc.TagLostException")
    (= error "Tag was lost.")
-   (= error "NFCError:100")))
+   (= error "NFCError:100")
+   (not (nil? (re-matches #".*NFCError:100.*" error)))
+   (not (nil? (re-matches #".*Tag connection lost.*" error)))))
 
 (fx/defn process-error [{:keys [db]} code error]
   (when-not (tag-lost-exception? code error)
